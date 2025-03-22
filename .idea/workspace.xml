@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e0fddebd-e1e7-4751-b9c4-b46a3186d2bf" name="Default Changelist" comment="" />
+    <list default="true" id="e0fddebd-e1e7-4751-b9c4-b46a3186d2bf" name="Default Changelist" comment="IMPORTANT" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,6 +15,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="2uckroD7zMARCTofxufR9W1zGqD" />
@@ -60,6 +65,18 @@
       <option name="presentableId" value="Default" />
       <updated>1742555450894</updated>
     </task>
+    <task id="LOCAL-00001" summary="IMPORTANT">
+      <created>1742680664338</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1742680664338</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="IMPORTANT" />
+    <option name="LAST_COMMIT_MESSAGE" value="IMPORTANT" />
   </component>
 </project>
