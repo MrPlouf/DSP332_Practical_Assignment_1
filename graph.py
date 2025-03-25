@@ -1,53 +1,25 @@
-"""
-this code is for making the tree just change the (initial_number) var and make sure the number is divisible by 2 & 3 (multi by 6) it will show you a .png of the game tree
-make sure you download graphviz
-
-
-pip install graphviz
-
-"""
-
 import graphviz
 
 
-def build_game_tree(current_number, player1_score, player2_score, depth, parent_node_id):
-    node_id = f"{current_number}_{player1_score}_{player2_score}_{depth}"
-    node_label = f"N:{current_number}\nP1:{player1_score}\nP2:{player2_score}"
+class GameGraph:
+    @staticmethod
+    def generate_game_tree(initial_number, human_score, computer_score):
+        def build_tree(current_number, p1_score, p2_score, depth, parent_id, dot):
+            node_id = f"{current_number}_{p1_score}_{p2_score}_{depth}"
+            label = f"N:{current_number}\nP1:{p1_score}\nP2:{p2_score}"
 
-    if current_number <= 10:
-        return graphviz.Digraph(node_attr={
-            'shape': 'box'}), node_id, f"Winner: {'Player 1' if player1_score > player2_score else 'Player 2' if player2_score > player1_score else 'Draw'}"
+            dot.node(node_id, label=label)
+            if parent_id:
+                dot.edge(parent_id, node_id)
 
-    dot = graphviz.Digraph(node_attr={'shape': 'box'})
+            if current_number <= 10 or (current_number % 2 != 0 and current_number % 3 != 0):
+                return
 
-    if parent_node_id:
-        dot.node(node_id, label=node_label)
-        dot.edge(parent_node_id, node_id)
-    else:
-        dot.node(node_id, label=node_label)
+            if current_number % 2 == 0:
+                build_tree(current_number // 2, p1_score, p2_score + 2, depth + 1, node_id, dot)
+            if current_number % 3 == 0:
+                build_tree(current_number // 3, p1_score + 3, p2_score, depth + 1, node_id, dot)
 
-    if depth % 2 == 0:  # Player 1's turn
-        if current_number % 2 == 0:
-            child_dot1, child_node_id1, winner1 = build_game_tree(current_number // 2, player1_score, player2_score + 2,
-                                                                  depth + 1, node_id)
-            dot.subgraph(child_dot1)
-        if current_number % 3 == 0:
-            child_dot2, child_node_id2, winner2 = build_game_tree(current_number // 3, player1_score + 3, player2_score,
-                                                                  depth + 1, node_id)
-            dot.subgraph(child_dot2)
-    else:  # Player 2's turn
-        if current_number % 2 == 0:
-            child_dot1, child_node_id1, winner1 = build_game_tree(current_number // 2, player1_score + 2, player2_score,
-                                                                  depth + 1, node_id)
-            dot.subgraph(child_dot1)
-        if current_number % 3 == 0:
-            child_dot2, child_node_id2, winner2 = build_game_tree(current_number // 3, player1_score, player2_score + 3,
-                                                                  depth + 1, node_id)
-            dot.subgraph(child_dot2)
-
-    return dot, node_id, ""
-
-# Example usage (start with an initial number)
-# initial_number = 1002
-# dot, _, _ = build_game_tree(initial_number, 0, 0, 0, None)
-# dot.render('game_tree', format='png', view=True)
+        dot = graphviz.Digraph(node_attr={'shape': 'box'})
+        build_tree(initial_number, human_score, computer_score, 0, None, dot)
+        dot.render('game_tree', format='png', view=True)
