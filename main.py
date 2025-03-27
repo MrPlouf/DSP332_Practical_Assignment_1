@@ -104,9 +104,9 @@
 #         self.info_label.config(text=f"Current Number: {self.current_number}\nHuman Score: {self.human_score}\nComputer Score: {self.computer_score}\nCurrent Player: {self.current_player}")
 from tkinter import *
 
-from NumberDivisionGame import NumberDivisionGame
+import NumberDivisionGame as NDG
 
 if __name__ == '__main__':
     root = Tk()
-    game = NumberDivisionGame(root)
+    game = NDG.NumberDivisionGame(root)
     root.mainloop()

@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e0fddebd-e1e7-4751-b9c4-b46a3186d2bf" name="Default Changelist" comment="IMPORTANT">
-      <change afterPath="$PROJECT_DIR$/GameLogic.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/NumberDivisionGame.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NumberDivisionGame.py" beforeDir="false" afterPath="$PROJECT_DIR$/NumberDivisionGame.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game_tree" beforeDir="false" afterPath="$PROJECT_DIR$/game_tree" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game_tree.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/graph.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -99,7 +97,14 @@
       <option name="project" value="LOCAL" />
       <updated>1742681372680</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="IMPORTANT">
+      <created>1742925632075</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1742925632075</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -112,6 +117,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="IMPORTANT" />
@@ -121,18 +127,13 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/NumberDivisionGame.py</url>
-          <line>91</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/GameLogic.py</url>
           <line>3</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/NumberDivisionGame.py</url>
-          <line>87</line>
+          <line>93</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
       </breakpoints>

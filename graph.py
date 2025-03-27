@@ -1,25 +1,28 @@
 import graphviz
 
-
+import GameLogic as gl
 class GameGraph:
     @staticmethod
-    def generate_game_tree(initial_number, human_score, computer_score):
-        def build_tree(current_number, p1_score, p2_score, depth, parent_id, dot):
-            node_id = f"{current_number}_{p1_score}_{p2_score}_{depth}"
-            label = f"N:{current_number}\nP1:{p1_score}\nP2:{p2_score}"
+    def build_game_tree(current_number, player1_score, player2_score, depth=0, parent_node_id=None, dot=None):
+        if dot is None:
+            dot = graphviz.Digraph(node_attr={'shape': 'box'})
 
-            dot.node(node_id, label=label)
-            if parent_id:
-                dot.edge(parent_id, node_id)
+        node_id = f"{current_number}_{player1_score}_{player2_score}_{depth}"
+        node_label = f"N:{current_number}\nP1:{player1_score}\nP2:{player2_score}"
+        dot.node(node_id, label=node_label)
 
-            if current_number <= 10 or (current_number % 2 != 0 and current_number % 3 != 0):
-                return
+        if parent_node_id:
+            dot.edge(parent_node_id, node_id)
 
-            if current_number % 2 == 0:
-                build_tree(current_number // 2, p1_score, p2_score + 2, depth + 1, node_id, dot)
-            if current_number % 3 == 0:
-                build_tree(current_number // 3, p1_score + 3, p2_score, depth + 1, node_id, dot)
+        if current_number > 10:
+            for move in gl.GameLogic.valid_moves(current_number):
+                new_number, score = gl.GameLogic.apply_move(current_number, move, 'human' if depth % 2 == 0 else 'computer')
+                new_p1_score = player1_score + (score if depth % 2 == 0 else 0)
+                new_p2_score = player2_score + (score if depth % 2 == 1 else 0)
+                GameGraph.build_game_tree(new_number, new_p1_score, new_p2_score, depth + 1, node_id, dot)
 
-        dot = graphviz.Digraph(node_attr={'shape': 'box'})
-        build_tree(initial_number, human_score, computer_score, 0, None, dot)
+        return dot
+
+    @staticmethod
+    def render_tree(dot):
         dot.render('game_tree', format='png', view=True)
