@@ -1,13 +1,10 @@
-#Use this file to create the game logic and functions
+import random
 
-import random as rd
+def generate_valid_numbers(count=5, min_val=10000, max_val=20000):
 
-#Creation of a simple function that generate a simple array of 5 numbers (see task for details)
-def generation_numbers():
-    nombres = []
-    while len(nombres)<5:
-        numero = rd.randint(10000,20000)
-        if numero % 6 == 0:
-            nombres.append(numero)
-    return nombres
-
+    numbers = set()
+    while len(numbers) < count:
+        num = random.randint(min_val, max_val)
+        if num % 6 == 0: 
+            numbers.add(num)
+    return sorted(list(numbers))
