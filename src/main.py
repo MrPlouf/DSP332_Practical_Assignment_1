@@ -1,18 +1,16 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
-import random
+from tkinter import messagebox
 import time
-import math
+#import algorithms
 from functions import generate_valid_numbers 
 from gametree import generate_complete_tree
 
 class Main:
-    """ Initializes UI, game state, and game flow. """
 
     #Initialisation of the different variables and functions used throughout the code
     def __init__(self, landing):
 
-        #Frame config
+        #Frame configuration for the projext
         self.landing = landing
         self.landing.title("Practical Assignment 1 - Groupe 33") 
         self.landing.geometry("600x450")
@@ -65,16 +63,17 @@ class Main:
 
 
     #base game functions
-    def _is_terminal_state(self, number):
+    def terminal_state(self, number):
         if number <= 10:
             return True
         if number > 10 and number % 2 != 0 and number % 3 != 0:
             return True
         return False
 
-    def _get_valid_moves(self, number):
+    #Gives the valide moves possible for the UI and the user to choose
+    def valid_moves(self, number):
         moves = []
-        if number <= 10:
+        if (self.terminal_state(number)):
             return []
         if number % 2 == 0:
             moves.append(2)
@@ -82,14 +81,16 @@ class Main:
             moves.append(3)
         return moves
 
+    #old deprecating evaluation -> see algorithms.py
     def evaluate_heuristic(self, number, human_score, computer_score):
 
-        if self._is_terminal_state(number):
+        if self.terminal_state(number):
              pass 
         score_diff = computer_score - human_score
 
         return score_diff
 
+    #Show window of the different parts of the game
     def show_frame(self, frame):
         for f in [self.Menu, self.Rules, self.Settings, self.About, self.NumberGeneration, self.Game, self.Results]:
             f.grid_forget()
@@ -97,6 +98,7 @@ class Main:
         self.landing.rowconfigure(0, weight=1)
         self.landing.columnconfigure(0, weight=1)
 
+    #sets chosen number before game
     def set_chosen_number(self, num):
         self.chosenNumber.set(num)
         
@@ -106,15 +108,16 @@ class Main:
                   if hasattr(self, 'status_label_numgen'):
                     self.status_label_numgen.config(text=f"Selected: {num}. Ready to Start.")
              else:
-                  #shount happen
+                  #shounldt happen
                   self.start_game_button.config(state=tk.DISABLED)
                   if hasattr(self, 'status_label_numgen'):
                     self.status_label_numgen.config(text="Select a number")
 
+    #Menu ui
     def Create_Menu(self):
-        self.Menu.columnconfigure((0, 1, 2), weight=1)
-        self.Menu.rowconfigure((0, 1, 2, 3), weight=1)
-        tk.Label(self.Menu, text="Welcome to our assignment :D", bg="lightblue", font=("Arial", 16)).grid(row=0, columnspan=3, padx=10, pady=10, sticky="w")
+        self.Menu.columnconfigure((0,1,2), weight=1)
+        self.Menu.rowconfigure((0,1,2,3), weight=1)
+        tk.Label(self.Menu, text="Welcome to our assignment !", bg="lightblue", font=("Arial", 16)).grid(row=0, columnspan=3, padx=10, pady=10, sticky="w")
         tk.Button(self.Menu, text="See Rules", command=lambda: self.show_frame(self.Rules), font=("Arial", 12)).grid(row=1, columnspan=2, column=0, padx=10, pady=10, sticky="nsew")
         tk.Button(self.Menu, text="About", command=lambda: self.show_frame(self.About), font=("Arial", 12)).grid(row=2, columnspan=2, column=0, padx=10, pady=10, sticky="nsew")
         tk.Button(self.Menu, text="Start Game Setup",
@@ -122,9 +125,10 @@ class Main:
                   font=("Arial", 12)).grid(row=3, columnspan=2, column=0, padx=10, pady=10, sticky="nsew")
         tk.Button(self.Menu, text="Settings", command=lambda: self.show_frame(self.Settings), font=("Arial", 12)).grid(row=0, column=2, padx=10, pady=10, sticky="ne")
 
+    #Rules ui
     def Create_Rules(self):
-        self.Rules.columnconfigure((0, 1), weight=1)
-        self.Rules.rowconfigure((0, 1, 2), weight=1)
+        self.Rules.columnconfigure((0,1), weight=1)
+        self.Rules.rowconfigure((0,1,2), weight=1)
         tk.Label(self.Rules, text="Rules given to us", bg="lightblue", font=("Arial", 14)).grid(row=0, padx=10, pady=10, sticky="w")
         rule_text = ("At the beginning of the game, the game software randomly generates 5 numbers between 10000 and 20000,"
                      "but initially divisible by both 3 and 2. The human player chooses which of the generated numbers "
@@ -139,8 +143,9 @@ class Main:
         tk.Label(self.Rules, text=rule_text, bg="lightblue", wraplength=500, font=("Arial", 12), justify="left").grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
         tk.Button(self.Rules, text="Go Back", command=lambda: self.show_frame(self.Menu)).grid(row=2, column=1, padx=10, pady=10, sticky="se")
 
+    #Names ui
     def Create_About(self):
-        self.About.columnconfigure((0, 1), weight=1)
+        self.About.columnconfigure((0,1), weight=1)
         self.About.rowconfigure(tuple(range(7)), weight=1)
         tk.Label(self.About, text="Team Members", bg="lightblue", font=("Arial", 12)).grid(row=0, padx=10, pady=10, sticky="w")
         tk.Label(self.About, text="Enzo Höhenberger", bg="lightblue", font=("Arial", 12)).grid(row=1, padx=10, pady=10, sticky="w")
@@ -150,10 +155,10 @@ class Main:
         tk.Label(self.About, text="Welathantrige Dawini Hasulu Boteju", bg="lightblue", font=("Arial", 12)).grid(row=5, padx=10, pady=10, sticky="w")
         tk.Button(self.About, text="Go Back", command=lambda: self.show_frame(self.Menu)).grid(row=6, column=1, padx=10, pady=10, sticky="se")
 
+    #Settings variables for settings
     def Change_Check_Value(self):
         
         #if not hasattr(self, 'warning_label'): return # Should not happen if called from Create_Settings
-
         if self.AlphaBetaAlgorithm.get() == 1 and self.MinMaxAlgorithm.get() == 1:
             self.warning_label.config(text="Select only one algorithm", fg="red")
             self.MinMaxAlgorithm.set(0)
@@ -169,20 +174,14 @@ class Main:
             self.MinMaxAlgorithm.set(1) 
             self.algorithm_used = "Minimax"
 
-        # Update combined warning label text
+        #Update combined warning label text
         algo_text = f"{self.algorithm_used} selected"
         start_text = "User starts first" if self.UserStart.get() == 1 else "Computer starts first"
         final_text = f"{algo_text}. {start_text}."
 
-        # Determine color based on algo status
-        #current_warning = self.warning_label.cget("text")
-        #final_color = "green" # Default success color
-        #if "Select only one" in current_warning: final_color = "red"
-        #elif "defaulting" in current_warning: final_color = "orange"
-
         self.warning_label.config(text=final_text, fg="green")
 
-
+    #settings ui
     def Create_Settings(self):
         
         self.Settings.columnconfigure((0,1,2), weight=1)
@@ -201,7 +200,7 @@ class Main:
 
         tk.Button(self.Settings, text="Go Back", command=lambda: [self.Change_Check_Value(), self.show_frame(self.Menu)]).grid(row=6, column=2, padx=10, pady=10, sticky="se")
 
-
+    #Number choosing ui
     def Create_NumberGeneration(self):
         #using number generation function in function.py
         for widget in self.NumberGeneration.winfo_children(): widget.destroy()
@@ -228,23 +227,14 @@ class Main:
             row, col = positions[i]
             btn.grid(row=row, column=col, padx=5, pady=10, sticky="ew")
             self.number_buttons.append(btn)
-            #if not default_selected:
-            #   btn.select()
-            #  default_selected = True
 
         self.status_label_numgen = tk.Label(self.NumberGeneration, text="", bg="lightblue", font=("Arial", 10))
         self.status_label_numgen.grid(row=3, column=0, columnspan=5, padx=10, pady=5, sticky="sw")
 
-        self.start_game_button = tk.Button(self.NumberGeneration, text="Start Game", state=tk.DISABLED,
-                                           command=self.start_game, font=("Arial", 12))
+        self.start_game_button = tk.Button(self.NumberGeneration, text="Start Game", state=tk.DISABLED,command=self.start_game, font=("Arial", 12))
         self.start_game_button.grid(row=3, column=5, columnspan=2, padx=10, pady=20, sticky="sew")
 
         tk.Button(self.NumberGeneration, text="Go Back", command=lambda: self.show_frame(self.Menu)).grid(row=4, column=5, columnspan=2, padx=10, pady=10, sticky="sew")
-
-        #if default_selected:
-        #    self.set_chosen_number(self.generated_numbers[0])
-        #else: 
-        #    self.set_chosen_number(0)
 
 
     #main game window
@@ -271,7 +261,7 @@ class Main:
 
         tk.Button(self.Game, text="Quit Game", command=lambda: self.show_frame(self.Menu)).grid(row=3, column=0, pady=20, sticky="s")
 
-
+    #final results ui
     def Create_Results(self, winner="Game Over", details=""):
 
         for widget in self.Results.winfo_children(): widget.destroy()
@@ -282,7 +272,7 @@ class Main:
         tk.Label(self.Results, text=details, bg="lightblue", font=("Arial", 14), justify="center").grid(row=1, column=0, padx=10, pady=10)
         tk.Button(self.Results, text="Back to Menu", command=lambda: self.show_frame(self.Menu), font=("Arial", 12)).grid(row=2, column=0, padx=10, pady=30)
 
-
+    #starting the game
     def start_game(self):
         
         #last check to start with smth available and possible
@@ -308,15 +298,15 @@ class Main:
 
         #preparation for function for dictionnary
         game_logic_funcs = {
-            'is_terminal': self._is_terminal_state,
-            'get_moves': self._get_valid_moves,
+            'is_terminal': self.terminal_state,
+            'get_moves': self.valid_moves,
             'evaluate': self.evaluate_heuristic
         }
 
         print(f"Starting tree generation for {self.current_number} using {self.algorithm_used} (max depth: {self.max_depth})...")
         #Update label
         if hasattr(self, 'status_label_numgen') and self.status_label_numgen.winfo_exists():
-             self.status_label_numgen.config(text=f"Generating tree ({self.algorithm_used})... Please wait.")
+             self.status_label_numgen.config(text=f"Generating tree ({self.algorithm_used})")
         self.landing.update_idletasks() #Force  to show message
 
         start_time = time.time()
@@ -345,6 +335,7 @@ class Main:
                  self.show_frame(self.Menu)
                  return
 
+            #reshow first window
             self.Create_Game() 
             self.show_frame(self.Game)
             self.update_game_state()
@@ -356,23 +347,23 @@ class Main:
             traceback.print_exc()
             self.show_frame(self.Menu) #cc menu
 
-
+    #used during game
     def update_game_state(self):
         #funciton to update state
-        if self._is_terminal_state(self.current_number):
+        if self.terminal_state(self.current_number):
             self.end_game()
             return
 
         # Check node key validity before proceeding
         if self.current_node_key is None:
-             print("Error: Current node key is None in update_game_state")
-             self.end_game("Error - Node Key Lost")
+             print("None in update_game_state") #debug
+             self.end_game("Error")
              return
 
         current_node_data = self.game_tree.get(self.current_node_key)
         if not current_node_data:
-            print(f"FATAL ERROR: Node {self.current_node_key} not found in tree during gameplay!")
-            self.end_game("Error - Tree Desync")
+            print(f"Node {self.current_node_key} not found") #debug
+            self.end_game("Error")
             return
 
         #update score
@@ -382,12 +373,12 @@ class Main:
         available_moves = current_node_data.get('children', {}).keys()
 
         if self.current_player == 'human':
-            self.turn_label.config(text="Your Turn", fg="blue")
+            self.turn_label.config(text="Your Turn", fg="green")
             self.divide_by_2_button.config(state=tk.NORMAL if 2 in available_moves else tk.DISABLED)
             self.divide_by_3_button.config(state=tk.NORMAL if 3 in available_moves else tk.DISABLED)
 
             if not available_moves: #no user moves
-                 print(f"Info: Human has no moves from node {self.current_node_key} (tree). Ending.")
+                 print(f"no moves for user {self.current_node_key}")
                  self.end_game()
 
         elif self.current_player == 'computer':
@@ -396,37 +387,37 @@ class Main:
             self.divide_by_3_button.config(state=tk.DISABLED)
 
             if not available_moves: #no computer moves
-                 print(f"Info: Computer has no moves from node {self.current_node_key} (tree). Ending.")
+                 print(f"no moves for comp {self.current_node_key}")
                  self.end_game()
             else:
                  self.landing.after(100, self.computer_turn) 
 
         else:
-             self.turn_label.config(text="Game Over", fg="grey")
+             self.turn_label.config(text="FINISHED", fg="grey")
              self.divide_by_2_button.config(state=tk.DISABLED)
              self.divide_by_3_button.config(state=tk.DISABLED)
 
 
     def make_move(self, divisor):
 
-        #make move for game and update ui
-        if self._is_terminal_state(self.current_number):
-            print("Warning: make_move called on a terminal state.")
+        #make move for game and update ui -> debug use
+        if self.terminal_state(self.current_number):
+            print("leaf node")
             return
         if self.current_node_key is None:
-             print("Error: make_move called with None node key.")
-             self.end_game("Error - Node Key Lost")
+             print("none in key")
+             self.end_game("error")
              return
 
         current_node_data = self.game_tree.get(self.current_node_key)
         if not current_node_data:
-             print(f"Error: Node {self.current_node_key} missing during make_move!")
-             self.end_game("Error - Tree Desync")
+             print(f"Error {self.current_node_key}")
+             self.end_game("Error")
              return
 
         possible_children = current_node_data.get('children', {})
         if divisor not in possible_children:
-             print(f"Error: Invalid move {divisor} attempted from node {self.current_node_key}. Allowed: {list(possible_children.keys())}")
+             print(f"Error dividing with{divisor} not possible in node {self.current_node_key}")
              return
 
         #Score change
@@ -458,13 +449,13 @@ class Main:
     def computer_turn(self):
         if self.current_player != 'computer': return
         if self.current_node_key is None:
-             print("Error: computer_turn called with None node key.")
-             self.end_game("Error - Node Key Lost")
+             print("Error none key.")
+             self.end_game("Error")
              return
 
         current_node_data = self.game_tree.get(self.current_node_key)
         if not current_node_data:
-            print(f"Error: Node {self.current_node_key} missing during computer turn!")
+            print(f"{self.current_node_key} missing")
             self.end_game("Error")
             return
 
@@ -475,20 +466,20 @@ class Main:
         if best_move is None or best_move not in available_moves:
             if available_moves:
                 if best_move is not None:
-                     print(f"Error: Stored best_move {best_move} invalid for node {self.current_node_key}. Children: {available_moves}. Falling back.")
+                     print("Erreur chagning")
                 else: 
-                     print(f"Warning: No 'best_move' for node {self.current_node_key}, choosing first: {available_moves[0]}")
+                     print("no best moves")
                 best_move = available_moves[0] # Fallback
             else:
                 #No more possibiliteies: game must end
-                print(f"Info: Computer has no moves from node {self.current_node_key} (no children). Should be terminal.")
+                print("No moves")
 
-                if not self._is_terminal_state(self.current_number):
-                     print(f"Warning: Node {self.current_node_key} has no moves but isn't terminal by number ({self.current_number})!")
+                if not self.terminal_state(self.current_number):
+                     print("is terminal but moves")
                 self.end_game()
                 return
 
-        print(f"Computer using move from tree: {best_move}")
+        print(f"Computer: {best_move}")
         self.make_move(best_move)
 
 
@@ -507,7 +498,7 @@ class Main:
                 self.divide_by_3_button.config(state=tk.DISABLED)
         except tk.TclError: pass
 
-        # Determine Winner
+        #Determine Winner
         if "Error" in status:
             winner = "Game ended due to error"
             details = f"Status: {status}\nFinal Number: {self.current_number}"
